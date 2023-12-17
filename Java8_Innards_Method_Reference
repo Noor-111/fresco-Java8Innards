@@ -1,0 +1,110 @@
+import java.io.*;
+import java.util.*;
+
+interface AnonymousInterface
+{
+    void getCipher(ArrayList<String> list);
+}
+
+class Cipher_Anonymous
+{
+    void anonymousClass(ArrayList<String> list) 
+    {
+        //Enter your Code here
+        AnonymousInterface anonFI = new AnonymousInterface(){
+        
+            @Override
+            public void getCipher(ArrayList<String> list) {
+                // Step 3: Convert the first character of each element to its ASCII value
+                // Create a new List copy to avoid data modification in the original list
+                ArrayList<String> inputList = new ArrayList<>(list);
+        for (int i = 0; i < inputList.size(); i+=2) {
+            String element = inputList.get(i);
+            char firstChar = element.charAt(0);
+            inputList.set(i, String.valueOf((int) firstChar) + element.substring(1));
+        }
+
+        // Step 4: Replace spaces with "#$"
+        for (int i = 0; i < inputList.size(); i++) {
+            String element = inputList.get(i);
+            if(element.equals(" ")){
+                inputList.set(i,"#$");
+            }
+        }
+
+        // Step 5: Reverse each element
+        for (int i = 0; i < inputList.size(); i++) {
+            String element = inputList.get(i);
+            inputList.set(i, new StringBuilder(element).reverse().toString());
+        }
+
+        // Step 6: Print all elements without spaces
+        StringBuilder output = new StringBuilder();
+        for (String element : inputList) {
+            output.append(element.replaceAll(" ", ""));
+        }
+
+        System.out.print(output.toString());
+                
+            }
+        };
+        
+        anonFI.getCipher(list);
+    }
+}
+
+class Cipher_MethodRef
+{
+    void methodReference(ArrayList<String> list)        
+    {
+        //Enter your Code here
+        Cipher_LambdaExp objCipher_LambdaExp = new Cipher_LambdaExp();
+        AnonymousInterface anonFI = objCipher_LambdaExp::lambdaExpression;
+        anonFI.getCipher(list);
+    }
+}
+
+class Cipher_LambdaExp
+{
+    void lambdaExpression(ArrayList<String> list) 
+    {
+        //Enter your Code here
+        AnonymousInterface anonFI = strList ->{
+            // Logic here
+            Cipher_Anonymous cipher_Anonymous = new Cipher_Anonymous();
+            cipher_Anonymous.anonymousClass(list);
+        };
+        anonFI.getCipher(list);
+    }
+}
+
+public class CipherMain
+{
+    public static void main(String[] args) throws Exception
+    {
+       BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
+		ArrayList<String> list=new ArrayList<>();
+		
+		String input=br.readLine();
+		String inputarr[]=input.split(" ");
+		
+		list.add(inputarr[0]);
+		for(int i=0;i<inputarr.length-1;i++)
+		 {
+			list.add(" ");
+			list.add(inputarr[i+1]);
+		 }
+		
+		Cipher_LambdaExp l1=new Cipher_LambdaExp();
+		System.out.print("Lambda Expression : ");
+		l1.lambdaExpression(list);
+		
+		Cipher_MethodRef m1=new Cipher_MethodRef();
+		System.out.print("\nMethod Reference : ");
+		m1.methodReference(list);
+		
+		Cipher_Anonymous a1=new Cipher_Anonymous();
+		System.out.print("\nAnonymous Class : ");
+		a1.anonymousClass(list);
+    }
+}
